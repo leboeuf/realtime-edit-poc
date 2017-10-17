@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title></title>
+	<style type="text/css">
+		.client-container {
+			float: left;
+			margin: 4px;
+		}
+		.client {
+			border: 1px solid #333;
+			width: 300px;
+			height: 300px;
+			overflow: scroll;
+			padding: 2px;
+		}
+		.client1 { color: #F2C22F; }
+		.client2 { color: #A209B2; }
+		.client3 { color: #2694e2; }
+		.client4 { color: #44CC1B; }
+		.cursor { font-weight: bold; margin: 0 1px; }
+	</style>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</head>
+<body>
+<div>
+	<div class="client-container">
+		<div class="client-name client1">Client 1</div>
+		<div class="client" id="client1">Lorem Ipsu<span class="cursor own">|</span></div>
+	</div>
+	<div class="client-container">
+		<div class="client-name client2">Client 2</div>
+		<div class="client" id="client2"><span class="cursor own">|</span></div>
+	</div>
+	<div class="client-container">
+		<div class="client-name client3">Client 3</div>
+		<div class="client" id="client3"><span class="cursor own">|</span></div>
+	</div>
+	<div class="client-container">
+		<div class="client-name client4">Client 4</div>
+		<div class="client" id="client4"><span class="cursor own">|</span></div>
+	</div>
+</div>
+<script type="text/javascript">
+var nbClients = 4;
+var client1Text = "";
+var client2Text = "";
+var client3Text = "";
+var client4Text = "";
+
+function pushCursor(clientId)
+{
+	for (let i = 1; i <= nbClients; i++) {
+		if (i == clientId)
+			continue;
+
+		var $client = $('#client' + i);
+		$client.html($client.html() + '<span class="cursor client'+clientId+'">|</span>');
+	}
+}
+
+pushCursor(1);
+pushCursor(2);
+pushCursor(3);
+pushCursor(4);
+</script>
+</body>
+</html>
