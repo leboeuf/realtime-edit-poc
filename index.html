@@ -3,16 +3,24 @@
 <head>
 	<title></title>
 	<style type="text/css">
-		.client-container {
+		.document-container {
 			float: left;
 			margin: 4px;
 		}
-		.client {
+		.document {
 			border: 1px solid #333;
 			width: 300px;
 			height: 300px;
 			overflow: scroll;
 			padding: 2px;
+		}
+		.debug-window {
+			border: 1px solid #333;
+			width: 928px;
+			height: 300px;
+			overflow: scroll;
+			padding: 2px;
+			font-family: Monospace;
 		}
 		.client1 { color: #F2C22F; }
 		.client2 { color: #A209B2; }
@@ -22,24 +30,33 @@
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="timerqueue.js"></script>
+	<script src="server.js"></script>
 </head>
 <body>
 <div>
-	<div class="client-container">
+	<div class="document-container">
 		<div class="client-name client1">Client 1</div>
-		<div class="client" id="client1"><span class="cursor own">|</span></div>
+		<div class="document" id="client1"><span class="cursor own">|</span></div>
 	</div>
-	<div class="client-container">
+	<div class="document-container">
 		<div class="client-name client2">Client 2</div>
-		<div class="client" id="client2"><span class="cursor own">|</span></div>
+		<div class="document" id="client2"><span class="cursor own">|</span></div>
 	</div>
-	<div class="client-container">
+	<div class="document-container">
 		<div class="client-name client3">Client 3</div>
-		<div class="client" id="client3"><span class="cursor own">|</span></div>
+		<div class="document" id="client3"><span class="cursor own">|</span></div>
 	</div>
-	<div class="client-container">
+	<div class="document-container">
 		<div class="client-name client4">Client 4</div>
-		<div class="client" id="client4"><span class="cursor own">|</span></div>
+		<div class="document" id="client4"><span class="cursor own">|</span></div>
+	</div>
+	<div class="document-container">
+		<div class="client-name">Server</div>
+		<div class="document" id="server"></div>
+	</div>
+	<div class="document-container">
+		<div class="client-name">Debug</div>
+		<div class="debug-window" id="debug"></div>
 	</div>
 </div>
 <script type="text/javascript">
@@ -49,6 +66,7 @@ var client1Text = "";
 var client2Text = "";
 var client3Text = "";
 var client4Text = "";
+var _server = new Server($('#server'), $('#debug'));
 
 function pushCursor(clientId)
 {
@@ -69,7 +87,7 @@ function typeCharacter(clientId, character, position){
 	client1Text = [client1Text.slice(0, position), character, client1Text.slice(position)].join('');
 	updateLocalClientView(clientId);
 	updateLocalClientCursor(clientId, position);
-	pushToServer('typeCharacter', clientId, character, position);
+	pushToServer(clientId, 'typeCharacter', position, character);
 }
 
 function updateLocalClientCursor(clientId, position){
@@ -77,8 +95,8 @@ function updateLocalClientCursor(clientId, position){
 	$client.html([client1Text.slice(0, position + 1), '<span class="cursor own">|</span>', client1Text.slice(position + 1)].join(''));
 }
 
-function pushToServer(operation, clientId, character, position){
-
+function pushToServer(clientId, operation, position, value){
+	_server.eventRaised(clientId, operation, position, value);
 }
 
 pushCursor(1);
@@ -86,11 +104,11 @@ pushCursor(2);
 pushCursor(3);
 pushCursor(4);
 
-var queue = new TimerQueue();
-queue.addTask(function(){ typeCharacter(1, 't', 0) }, tickTime);
-queue.addTask(function(){ typeCharacter(1, 'e', 1) }, tickTime);
-queue.addTask(function(){ typeCharacter(1, 's', 2) }, tickTime);
-queue.addTask(function(){ typeCharacter(1, 't', 3) }, tickTime);
+var _queue = new TimerQueue();
+_queue.addTask(function(){ typeCharacter(1, 't', 0) }, tickTime);
+_queue.addTask(function(){ typeCharacter(1, 'e', 1) }, tickTime);
+_queue.addTask(function(){ typeCharacter(1, 's', 2) }, tickTime);
+_queue.addTask(function(){ typeCharacter(1, 't', 3) }, tickTime);
 
 </script>
 </body>
