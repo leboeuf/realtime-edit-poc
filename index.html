@@ -20,7 +20,7 @@
 			height: 300px;
 			overflow: scroll;
 			padding: 2px;
-			font-family: Monospace;
+			font-family: Monospace;3
 		}
 		.client1 { color: #F2C22F; }
 		.client2 { color: #A209B2; }
@@ -98,6 +98,11 @@ function updateLocalClientCursor(clientId, position){
 function pushToServer(clientId, operation, position, value){
 	_server.eventRaised(clientId, operation, position, value);
 }
+
+_server.clientConnected(1);
+_server.clientConnected(2);
+_server.clientConnected(3);
+_server.clientConnected(4);
 
 pushCursor(1);
 pushCursor(2);
