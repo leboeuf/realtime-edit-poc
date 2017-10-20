@@ -31,6 +31,7 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
 	<script src="timerqueue.js"></script>
 	<script src="server.js"></script>
+	<script src="client.js"></script>
 </head>
 <body>
 <div>
@@ -67,6 +68,10 @@ var client2Text = "";
 var client3Text = "";
 var client4Text = "";
 var _server = new Server($('#server'), $('#debug'));
+var _client1 = new Client($('#client1'));
+var _client2 = new Client($('#client2'));
+var _client3 = new Client($('#client3'));
+var _client4 = new Client($('#client4'));
 
 function pushCursor(clientId)
 {
