@@ -6,7 +6,7 @@ function Server(outputTarget, debugTarget){
 	// DOM element where to output debug information
 	this.debugTarget = debugTarget;
 
-	this.clients = [];
+	this.clients = []; // Array of int
 	this.document = '';
 }
 

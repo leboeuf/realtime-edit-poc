@@ -63,10 +63,6 @@
 <script type="text/javascript">
 var tickTime = 500; // number of ms between operations
 var nbClients = 4;
-var client1Text = "";
-var client2Text = "";
-var client3Text = "";
-var client4Text = "";
 var _server = new Server($('#server'), $('#debug'));
 var _client1 = new Client($('#client1'));
 var _client2 = new Client($('#client2'));
@@ -85,19 +81,21 @@ function pushCursor(clientId)
 }
 
 function updateLocalClientView(clientId){
-	$('#client' + clientId).html(eval('client' + clientId + 'Text'));
+	$('#client' + clientId).html(eval('_client' + clientId).document);
 }
 
 function typeCharacter(clientId, character, position){
-	client1Text = [client1Text.slice(0, position), character, client1Text.slice(position)].join('');
+	var client = eval('_client' + clientId);
+	client.document = [client.document.slice(0, position), character, client.document.slice(position)].join('');
 	updateLocalClientView(clientId);
 	updateLocalClientCursor(clientId, position);
 	pushToServer(clientId, 'typeCharacter', position, character);
 }
 
 function updateLocalClientCursor(clientId, position){
+	var client = eval('_client' + clientId);
 	var $client = $('#client' + clientId);
-	$client.html([client1Text.slice(0, position + 1), '<span class="cursor own">|</span>', client1Text.slice(position + 1)].join(''));
+	$client.html([client.document.slice(0, position + 1), '<span class="cursor own">|</span>', client.document.slice(position + 1)].join(''));
 }
 
 function pushToServer(clientId, operation, position, value){
