@@ -33,5 +33,7 @@ Server.prototype.eventRaised = function(clientId, operation, position, value){
 };
 
 Server.prototype.broadcast = function(clientId, operation, position, value){
+	for (let i = 1; i <= this.clients.length; i++){
 
+	}
 };

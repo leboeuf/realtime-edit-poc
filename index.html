@@ -22,10 +22,10 @@
 			padding: 2px;
 			font-family: Monospace;3
 		}
-		.client1 { color: #F2C22F; }
-		.client2 { color: #A209B2; }
-		.client3 { color: #2694e2; }
-		.client4 { color: #44CC1B; }
+		.client0 { color: #F2C22F; }
+		.client1 { color: #A209B2; }
+		.client2 { color: #2694e2; }
+		.client3 { color: #44CC1B; }
 		.cursor { font-weight: bold; margin: 0 1px; }
 	</style>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -35,6 +35,10 @@
 </head>
 <body>
 <div>
+	<div class="document-container">
+		<div class="client-name client0">Client 0</div>
+		<div class="document" id="client0"><span class="cursor own">|</span></div>
+	</div>
 	<div class="document-container">
 		<div class="client-name client1">Client 1</div>
 		<div class="document" id="client1"><span class="cursor own">|</span></div>
@@ -48,10 +52,6 @@
 		<div class="document" id="client3"><span class="cursor own">|</span></div>
 	</div>
 	<div class="document-container">
-		<div class="client-name client4">Client 4</div>
-		<div class="document" id="client4"><span class="cursor own">|</span></div>
-	</div>
-	<div class="document-container">
 		<div class="client-name">Server</div>
 		<div class="document" id="server"></div>
 	</div>
@@ -62,16 +62,12 @@
 </div>
 <script type="text/javascript">
 var tickTime = 500; // number of ms between operations
-var nbClients = 4;
+var _clients = []; // Array of Client
 var _server = new Server($('#server'), $('#debug'));
-var _client1 = new Client($('#client1'));
-var _client2 = new Client($('#client2'));
-var _client3 = new Client($('#client3'));
-var _client4 = new Client($('#client4'));
 
 function pushCursor(clientId)
 {
-	for (let i = 1; i <= nbClients; i++){
+	for (let i = 0; i < _clients.length; i++){
 		if (i == clientId)
 			continue;
 
@@ -80,43 +76,42 @@ function pushCursor(clientId)
 	}
 }
 
-function updateLocalClientView(clientId){
-	$('#client' + clientId).html(eval('_client' + clientId).document);
-}
-
 function typeCharacter(clientId, character, position){
-	var client = eval('_client' + clientId);
+	var client = _clients[clientId];
 	client.document = [client.document.slice(0, position), character, client.document.slice(position)].join('');
-	updateLocalClientView(clientId);
+	client.updateView();
 	updateLocalClientCursor(clientId, position);
 	pushToServer(clientId, 'typeCharacter', position, character);
 }
 
 function updateLocalClientCursor(clientId, position){
-	var client = eval('_client' + clientId);
-	var $client = $('#client' + clientId);
-	$client.html([client.document.slice(0, position + 1), '<span class="cursor own">|</span>', client.document.slice(position + 1)].join(''));
+	var client = _clients[clientId];
+	client.outputTarget.html([client.document.slice(0, position + 1), '<span class="cursor own">|</span>', client.document.slice(position + 1)].join(''));
 }
 
 function pushToServer(clientId, operation, position, value){
 	_server.eventRaised(clientId, operation, position, value);
 }
 
+_clients.push(new Client($('#client0')));
+_clients.push(new Client($('#client1')));
+_clients.push(new Client($('#client2')));
+_clients.push(new Client($('#client3')));
+_server.clientConnected(0);
 _server.clientConnected(1);
 _server.clientConnected(2);
 _server.clientConnected(3);
-_server.clientConnected(4);
 
+pushCursor(0);
 pushCursor(1);
 pushCursor(2);
 pushCursor(3);
-pushCursor(4);
 
 var _queue = new TimerQueue();
-_queue.addTask(function(){ typeCharacter(1, 't', 0) }, tickTime);
-_queue.addTask(function(){ typeCharacter(1, 'e', 1) }, tickTime);
-_queue.addTask(function(){ typeCharacter(1, 's', 2) }, tickTime);
-_queue.addTask(function(){ typeCharacter(1, 't', 3) }, tickTime);
+_queue.addTask(function(){ typeCharacter(0, 't', 0) }, tickTime);
+_queue.addTask(function(){ typeCharacter(0, 'e', 1) }, tickTime);
+_queue.addTask(function(){ typeCharacter(0, 's', 2) }, tickTime);
+_queue.addTask(function(){ typeCharacter(0, 't', 3) }, tickTime);
 
 </script>
 </body>
