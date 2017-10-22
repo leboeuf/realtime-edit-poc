@@ -71,8 +71,8 @@ function pushCursor(clientId)
 		if (i == clientId)
 			continue;
 
-		var $client = $('#client' + i);
-		$client.html($client.html() + '<span class="cursor client'+clientId+'">|</span>');
+		var client = _clients[i];
+		client.outputTarget.html(client.outputTarget.html() + '<span class="cursor client'+i+'">|</span>');
 	}
 }
 
