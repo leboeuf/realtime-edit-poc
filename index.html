@@ -72,7 +72,7 @@ function pushCursor(clientId)
 			continue;
 
 		var client = _clients[i];
-		client.outputTarget.html(client.outputTarget.html() + '<span class="cursor client'+i+'">|</span>');
+		client.outputTarget.html(client.outputTarget.html() + '<span class="cursor client'+clientId+'">|</span>');
 	}
 }
 
